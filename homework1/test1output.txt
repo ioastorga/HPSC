@@ -1,0 +1,6 @@
+Code run by **Io Astorga**
+Environment variable UWHPSC is /Users/ioastorga/Documents/Coursera/Programming/uwhpsc
+Environment variable MYHPSC is /Users/ioastorga/Documents/Coursera/HPSC
+Imported numpy ok
+Imported matplotlib ok
+Imported pylab ok
