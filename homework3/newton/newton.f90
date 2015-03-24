@@ -4,7 +4,7 @@ module newton
 
     ! module parameters:
     implicit none
-    integer, parameter :: maxiter = 20
+    integer, parameter :: maxiter = 40
     real(kind=8), parameter :: tol = 1.d-14
 
 contains
