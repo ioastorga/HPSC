@@ -27,7 +27,7 @@ real(kind=8) function gval(x)
     real(kind=8), parameter :: pi = 3.141592653589793d0
     real(kind=8), intent(in) ::x
 
-    gval =  x+cos(pi*x) - 1.d0 + 0.6d0*x**2
+    gval =  x*cos(pi*x) - 1.d0 + 0.6d0*x**2
 
 end function gval
 
