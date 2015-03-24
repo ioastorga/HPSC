@@ -22,43 +22,23 @@ real(kind=8) function fprime_sqrt(x)
 end function fprime_sqrt
 
 
-real(kind=8) function g1val(x)
+real(kind=8) function gval(x)
     implicit none
     real(kind=8), parameter :: pi = 3.141592653589793d0
-    real(kind=8), intent(in)::x
+    real(kind=8), intent(in) ::x
 
-    g1 =  x+cos(pi*x)
+    gval =  x+cos(pi*x) - 1.d0 + 0.6d0*x**2
 
-end function g1val
+end function gval
 
 
-real(kind=8) function g1pval(x)
+real(kind=8) function gpval(x)
     implicit none
     real(kind=8), parameter :: pi = 3.141592653589793d0
-    real(kind=8), intent(in)::x
+    real(kind=8), intent(in) ::x
 
-    g1p = cos(pi*x) -x*pi*sin(pi*x)
+    gpval = cos(pi*x) - x*pi*sin(pi*x) + 1.2d0*x
 
-end function g1pval
-
-
-real(kind=8) function g2val(x)
-    implicit none
-    real(kind=8), intent(in)::x
-
-    g2 = 1.d0-0.6d0*x**2.d0
-
-end function g2val
-
-
-real(kind=8) function g2pval(x)
-    implicit none
-    real(kind=8), intent(in)::x
-
-    g2p = -1.2d0*x
-
-end function g2pval
-
-
+end function gpval
 
 end module functions
