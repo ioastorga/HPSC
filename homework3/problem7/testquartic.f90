@@ -9,14 +9,14 @@ program testquartic
     implicit none
     real(kind=8),dimension(3) :: toler, epiN
     integer :: i,j, iters
-    real(kind=8) :: fx, xtry, xout, errorX
+    real(kind=8) :: fx, xtry, xout, errorX, tol, epsilon
     logical :: debug = .false.
 
     xtry = 4.0
     toler = (/1.d-5, 1.d-10, 1.d-14/)
     epiN = (/1.d-4, 1.d-8, 1.d-12/)
 
-    print *, '    epsilon        tol    iters          x                 f(x)
+    print *, '    epsilon        tol    iters          x                 f(x)&
     x-xstar'
 
     i=1
@@ -30,9 +30,10 @@ program testquartic
             errorX = xout - xtry
             print 11, epsilon, tol, iters, xout, fx, errorX
          11 format(2es13.3, i4, es24.15, 2es13.3)
-        i = i+1
+            j = j+1
+            enddo
+        i= i +1
         enddo
-    enddo
 end program testquartic
 
 
