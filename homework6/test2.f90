@@ -63,8 +63,9 @@ program test2
                      0, MPI_ANY_TAG, &
                      MPI_COMM_WORLD,status,ierr)
         int_sub = trapezoid(f,ab_sub(1), ab_sub(2), n)
+        j = status(MPI_TAG)
         call MPI_SEND(int_sub, 1,  MPI_DOUBLE_PRECISION, &
-                      0, MPI_ANY_TAG, &
+                      0, j, &
                       MPI_COMM_WORLD, ierr)
         endif
 
@@ -83,7 +84,7 @@ program test2
         !call MPI_REDUCE(fevals_proc,fevals_total,1, MPI_INT,MPI_SUM,0, &
          !           MPI_COMM_WORLD,ierr) 
         !fevals_total = 0   !! need to fix
-        print '("Trapezoid approximation with ",i8, " total points:, &
+        print '("Trapezoid approximation with ",i8, " total points: &
         ",es22.14)', nsub*n, int_approx
         print '("Total number of fevals: ",i10)', fevals_total
         endif
