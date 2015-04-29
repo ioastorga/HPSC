@@ -32,12 +32,12 @@ contains
     V = 1
     sum_npoints = 0
 
-    do j = npoints
+    do j = 1,npoints
         r_ndim = r(c:c+ndim-1)
         do i = 1,ndim
             bi = b(i)
             ai = a(i)
-            if j == 1 then
+            if (j == 1) then
                 V = V*(bi-ai)
             endif
             x = ai + r_ndim*(bi-ai)
