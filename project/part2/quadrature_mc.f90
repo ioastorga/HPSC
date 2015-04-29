@@ -40,8 +40,9 @@ contains
             if (j == 1) then
                 V = V*(bi-ai)
             endif
-            x = ai + r_ndim*(bi-ai)
-            sum_npoints =  sum_npoints + g(x,ndim)
+            x(i) = ai + r_ndim(i)*(bi-ai)
+
+            !sum_npoints =  sum_npoints + g(x,ndim)
             enddo
         sum_npoints = sum_npoints + g(x,ndim)
         c = c+ndim
