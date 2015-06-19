@@ -19,8 +19,7 @@ contains
     real(kind=8), dimension(ndim), intent(in) :: a,b
 
     real(kind=8) :: V, sum_npoints, ai,bi
-    real(kind=8), dimension(ndim) :: r_ndim
-    real(kind=8), dimension(ndim) :: x
+    real(kind=8), dimension(ndim) :: r_ndim,x
     real(kind=8) :: quad_mc
     integer :: i,j,c
     real(kind=8), allocatable :: r(:)
@@ -41,8 +40,6 @@ contains
                 V = V*(bi-ai)
             endif
             x(i) = ai + r_ndim(i)*(bi-ai)
-
-            !sum_npoints =  sum_npoints + g(x,ndim)
             enddo
         sum_npoints = sum_npoints + g(x,ndim)
         c = c+ndim
