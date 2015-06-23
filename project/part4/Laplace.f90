@@ -20,9 +20,13 @@ program Laplace
     real(kind=8) :: x0, y0, u_mc, error, ut
     real(kind=8) :: u_mc_total, u_sum_old, u_sum_new
     integer :: seed1, max_steps, n_mc, n_success, n_total
-    integer :: i,i0,j0
+    integer :: i,i0,j0, nwalkstot
+    integer :: ierr, numprocs, proc_num
 
     call MPI_INIT(ierr)
+    call MPI_COMM_SIZE(MPI_COMM_WORLD, numprocs, ierr)                         
+    call MPI_COMM_RANK(MPI_COMM_WORLD, proc_num, ierr)   
+  
     nwalks = 0
     open(unit=25, file='mc_Laplace_error.txt', status='unknown')
 
@@ -42,31 +46,46 @@ program Laplace
 
     max_steps = 100*max(nx, ny)
     n_mc = 10
-
     call many_walks(i0, j0, max_steps, n_mc, u_mc, n_success)
-    error = abs((u_mc - ut)/ut)
-    u_mc_total = u_mc
-    n_total = n_success
 
-    write(25,'(i10,e23.15,e15.6)') n_total, u_mc_total, error
-    print '(i10,e23.15,e15.6)', n_total, u_mc_total, error
+    if (proc_num == 0) then
+    !    call many_walks(i0, j0, max_steps, n_mc, u_mc, n_success)
+        error = abs((u_mc - ut)/ut)
+        u_mc_total = u_mc
+        n_total = n_success
+
+        write(25,'(i10,e23.15,e15.6)') n_total, u_mc_total, error
+        print '(i10,e23.15,e15.6)', n_total, u_mc_total, error
+
+    endif
 
     do i=1, 12
-        u_sum_old = u_mc_total * n_total
+        !u_sum_old = u_mc_total * n_total
         call many_walks(i0, j0, max_steps, n_mc, u_mc, n_success)
-        u_sum_new = u_mc * n_success
-        n_total = n_total + n_success
-        u_mc_total = (u_sum_old + u_sum_new)/n_total
-        error = abs((u_mc_total -ut)/ut)
+        if (proc_num == 0) then
+       !    call many_walks(i0, j0, max_steps, n_mc, u_mc, n_success)
+            u_sum_old = u_mc_total * n_total
+            u_sum_new = u_mc * n_success
+            n_total = n_total + n_success
+            u_mc_total = (u_sum_old + u_sum_new)/n_total
+            error = abs((u_mc_total -ut)/ut)
 
-        write(25,'(i10,e23.15, e15.6)') n_total, u_mc_total, error
-        print '(i10,e23.15,e15.6)', n_total, u_mc_total, error
-        
+            write(25,'(i10,e23.15, e15.6)') n_total, u_mc_total, error
+            print '(i10,e23.15,e15.6)', n_total, u_mc_total, error
+        endif
         n_mc = 2*n_mc !double N for next iter 
     enddo
+    
+    call MPI_REDUCE(nwalks, nwalkstot, 1, MPI_INTEGER, MPI_SUM, & 
+                   0,MPI_COMM_WORLD, ierr) 
 
-    print '("Final approximation to u(x0, y0):  ", es22.14)', u_mc_total
-    print *, "Total number random walks:  ", nwalks
+    if  (proc_num ==0) then
+        print '("Final approximation to u(x0, y0):  ", es22.14)', u_mc_total
+        print *, "Total number random walks:  ", nwalkstot
+    endif
+    
+    call MPI_BARRIER(MPI_COMM_WORLD,ierr)
+    print ' ("Walks by Process :  ",i2, ": ",i10)', proc_num,nwalks 
 
     call MPI_FINALIZE(ierr)
 
